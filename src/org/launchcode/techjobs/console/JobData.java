@@ -10,6 +10,8 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 /**
  * Created by LaunchCode
@@ -76,7 +78,7 @@ public class JobData {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (caseInsensitive(value, aValue)) {
                 jobs.add(row);
             }
         }
@@ -125,4 +127,37 @@ public class JobData {
         }
     }
 
-}
+    public static ArrayList<HashMap<String, String>> findByValue(String value) {
+        //search some given term in all columns;
+        //only display columm once if term is in row more than once
+        //call in main
+
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> row : allJobs) {
+            for (Map.Entry<String, String> keyVal : row.entrySet()) {
+                String val = keyVal.getValue();
+                if (caseInsensitive(value, val)) {
+                    jobs.add(row);
+                    break;
+                }
+            }
+
+        }
+
+        return jobs;
+    }
+
+    public static Boolean caseInsensitive(String searchTerm, String jobInfo) {
+        String term = searchTerm.toLowerCase();
+        String info = jobInfo.toLowerCase();
+
+        return info.contains(term);
+    }
+
+
+    }
+
+
